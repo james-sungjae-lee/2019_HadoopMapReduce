@@ -49,10 +49,10 @@ public class HashtagCount {
         public void map(LongWritable key, Text value, Context context)
                 throws IOException, InterruptedException {
             String line = value.toString();
-            String[] words = line.split("//S+");
+            String[] words = line.split(" ");
 
             for (String word : words) {
-                if(word.length() > 1 && word.startsWith('#')){
+                if(word.length() > 1 && word.startsWith("#")){
                     hashtag.set(word);
                     context.write(hashtag, one);
                 }
