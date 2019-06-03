@@ -41,6 +41,10 @@ public class HappyContain{
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(Text.class);
 
+	// set Mapper and Reducer class to Map and Reduce
+	job.setMapperClass(Map.class);
+	job.setReducerClass(Reduce.class);
+
         // InputFormat 과 OutputFormat 을 Text Format 으로 지정한다.
         job.setInputFormatClass(TextInputFormat.class);
         job.setOutputFormatClass(TextOutputFormat.class);
@@ -59,11 +63,11 @@ public class HappyContain{
         // 반환하고자 하는 Key 값은 happy 단어가 들어있는 tweet 이므로, Text 객체로 생성한다.
         private Text happy_tweet = new Text();
 
-        public void map(LongWritable key, Text value, Context context) throws IOEXception, IterruptedException{
+        public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException{
             // 전체 텍스트의 각 line 을 String 변환 하여 tweet 으로 저장한다.
             // 만약 해당 String 에 "happy" 가 존재하면, happy_tweet 으로 만들어 context 에 저장한다.
             String tweet = value.toString();
-            if(tweet.toLowerCase().contain("happy")){
+            if(tweet.toLowerCase().contains("happy")){
                 happy_tweet.set(tweet);
                 context.write(happy_tweet, key);
             }
@@ -86,14 +90,14 @@ public class HappyContain{
             // idListBuilder 에는 [ a, b, c ] 형태로 ID 가 저장되게 된다.
             // 만약 idListBuilder 에 어떠한 ID가 앞에 존재한다면, ", " 를 이용해 다음 ID 와 구분한다.
             // value 는
-            idListBuilder.append("[ ")
+            idListBuilder.append("[ ");
             for(LongWritable value : values){
                 if(idListBuilder.length() > 2){
                     idListBuilder.append(", ");
                 }
-                idListBuilder.append(String.valueOf(value.get()))
+                idListBuilder.append(String.valueOf(value.get()));
             }
-            idListBuilder.append(" ]")
+            idListBuilder.append(" ]");
 
             // 현재 idListBuilder 는 StringBuilder 객체이기 때문에, String 으로 변환 후 Text 로 만들어야 한다.
             // 만들어진 Text 객체는 context 에 write 하는 것으로 끝난다.
