@@ -117,6 +117,15 @@ public class SortHashtags {
             Configuration conf = context.getConfiguration();
             String knum = conf.get("knum");
             int int_knum = Integer.parseInt(knum);
+            int counter = 0;
+
+            while(values.hasNext()){
+                context.write(value.next(), key);
+                counter += 1;
+                if(counter == int_knum){
+                    break;
+                }
+            }
 
             for(int i = 1; i++; i == int_knum){
                 context.write(values.next(), key);
