@@ -118,6 +118,7 @@ public class SortHashtags {
             Configuration conf = context.getConfiguration();
             String knum = conf.get("knum");
             int int_knum = Integer.parseInt(knum);
+            int minus_key = 0;
 
             for(Text value : values){
                 if(counter < int_knum){
