@@ -121,7 +121,8 @@ public class SortHashtags {
 
             for(Text value : values){
                 if(counter < int_knum){
-                    context.write(value, key);
+                    minus_key = -1 * key.get();
+                    context.write(value, new IntWritable(minus_key));
                     counter += 1;
                 }
             }
