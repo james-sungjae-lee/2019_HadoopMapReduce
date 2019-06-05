@@ -111,13 +111,14 @@ public class SortHashtags {
     }
 
     public static class SortByValueReduce extends Reducer<IntWritable, Text, Text, IntWritable> {
-        Configuration conf = context.getConfiguration();
-        String knum = conf.get("knum");
-        int int_knum = Integer.parseInt(knum);
+        // Configuration conf = context.getConfiguration();
+        // String knum = conf.get("knum");
+        // int int_knum = Integer.parseInt(knum);
+        int int_knum = 20;
         int counter = 0;
         public void reduce(IntWritable key, Iterable<Text> values, Context context)
                 throws IOException, InterruptedException {
-            if(counter < int_knum){
+                if(counter < int_knum){
                 for (Text value : values) {
                     context.write(value, key);
                 }
