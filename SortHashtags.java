@@ -112,24 +112,15 @@ public class SortHashtags {
 
     public static class SortByValueReduce extends Reducer<IntWritable, Text, Text, IntWritable> {
 
-        private Map countMap = new HashMap<>();
-        Configuration conf = context.getConfiguration();
-        String knum = conf.get("knum");
-        int int_knum = Integer.parseInt(knum);
-
         public void reduce(IntWritable key, Iterable<Text> values, Context context)
                 throws IOException, InterruptedException {
-            countMap.put(key, new IntWritable(values));
-        }
-        @Override
-        protected void cleanup(Context context) throws IOException, InterruptedException {
-        Map sortedMap = sortByValues(countMap);
-        int counter = 0;
-        for (Text key: sortedMap.keySet()) {
-            if (counter ++ == int_knum) {
-                break;
+            Configuration conf = context.getConfiguration();
+            String knum = conf.get("knum");
+            int int_knum = Integer.parseInt(knum);
+
+            for(int i = 1; i++; i == int_knum){
+                context.write(values.next(), key);
             }
-            context.write(key, sortedMap.get(key));
         }
     }
 }
