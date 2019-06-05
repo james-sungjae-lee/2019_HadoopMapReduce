@@ -45,6 +45,8 @@ public class SortHashtags {
          */
         Job job2 = Job.getInstance(conf, "SortByCountValue");
 
+        job2.getConfiguration().set("knum", args[2])
+
         job2.setNumReduceTasks(1);
 
         job2.setJarByClass(SortHashtags.class);
@@ -111,8 +113,12 @@ public class SortHashtags {
     public static class SortByValueReduce extends Reducer<IntWritable, Text, Text, IntWritable> {
         public void reduce(IntWritable key, Iterable<Text> values, Context context)
                 throws IOException, InterruptedException {
-            for (Text value : values) {
-                context.write(value, key);
+
+            int knum = conf.get("knum");
+            for(int i = 0; i < knum; i++){
+                for (Text value : values) {
+                    context.write(value, key);
+                }
             }
         }
     }
