@@ -16,27 +16,18 @@ import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 
+class MyKeyComparator extends WritableComparator {
+    protected DescendingKeyComparator() {
+        super(Text.class, true);
+    }
 
-public static class ReverseComparator extends WritableComparator {
-     
-    private static final Text.Comparator TEXT_COMPARATOR = new Text.Comparator();
-    public ReverseComparator() {
-        super(Text.class);
-    }
- 
-    @Override
-    public int compare(byte[] b1, int s1, int l1, byte[] b2, int s2, int l2) {
-       return (-1)* TEXT_COMPARATOR.compare(b1, s1, l1, b2, s2, l2);
-    }
- 
-    @SuppressWarnings("rawtypes")
-    @Override
-    public int compare(WritableComparable a, WritableComparable b) {
-        if (a instanceof Text && b instanceof Text) {
-                return (-1)*(((Text) a).compareTo((Text) b));
-        }
-        return super.compare(a, b);
-    }
+    @SuppressWarnings("rawtypes")
+    @Override
+    public int compare(WritableComparable w1, WritableComparable w2) {
+        Text key1 = (Text) w1;
+        Text key2 = (Text) w2;
+        return -1 * key1.compareTo(key2);
+    }
 }
 
 public class SortHashtags {
@@ -69,7 +60,7 @@ public class SortHashtags {
         Job job2 = Job.getInstance(conf, "SortByCountValue");
 
         job2.getConfiguration().set("knum", args[2]);
-        job2.setSortComparator(ReverseComparator.class);
+        job2.setSortComparatorClass(MyKeyComparator.class);
 
         job2.setNumReduceTasks(1);
 
