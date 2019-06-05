@@ -16,6 +16,20 @@ import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 
+public class MyKeyComparator extends WritableComparator {
+    protected DescendingKeyComparator() {
+        super(Text.class, true);
+    }
+
+    @SuppressWarnings("rawtypes")
+    @Override
+    public int compare(WritableComparable w1, WritableComparable w2) {
+        Text key1 = (Text) w1;
+        Text key2 = (Text) w2;
+        return -1 * key1.compareTo(key2);
+    }
+}
+
 public class SortHashtags {
     public static void main(String[] args) throws Exception {
         Configuration conf = new Configuration();
@@ -46,6 +60,7 @@ public class SortHashtags {
         Job job2 = Job.getInstance(conf, "SortByCountValue");
 
         job2.getConfiguration().set("knum", args[2]);
+        job2.setSortComparatorClass(MyKeyComparator.class);
 
         job2.setNumReduceTasks(1);
 
