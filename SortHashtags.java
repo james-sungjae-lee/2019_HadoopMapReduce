@@ -24,7 +24,7 @@ public class SortHashtags {
          * Job 1: Count the number of genres appeared
          */
         Job job1 = Job.getInstance(conf, "HashtagCount");
-        job1.setJarByClass(WordCount.class);
+        job1.setJarByClass(SortHashtags.class);
 
         job1.setMapperClass(HashtagCounterMap.class);
         job1.setReducerClass(HashtagCounterReduce.class);
@@ -47,7 +47,7 @@ public class SortHashtags {
 
         job2.setNumReduceTasks(1);
 
-        job2.setJarByClass(WordCount.class);
+        job2.setJarByClass(SortHashtags.class);
 
         job2.setMapperClass(SortByValueMap.class);
         job2.setReducerClass(SortByValueReduce.class);
