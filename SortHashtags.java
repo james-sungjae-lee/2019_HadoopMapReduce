@@ -119,16 +119,10 @@ public class SortHashtags {
             int int_knum = Integer.parseInt(knum);
             int counter = 0;
 
-            while(values.hasNext()){
-                context.write(value.next(), key);
-                counter += 1;
-                if(counter == int_knum){
-                    break;
+            for (Text value : values) {
+                if(key > int_knum){
+                    context.write(value, key);
                 }
-            }
-
-            for(int i = 1; i++; i == int_knum){
-                context.write(values.next(), key);
             }
         }
     }
